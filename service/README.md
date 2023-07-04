@@ -127,6 +127,10 @@ Please note that in the above example, the placeholders
  `{account_id}` and `{BASE_URL}` should be replaced with actual values specific to your application.
 
 ```
+
+  **This is how the code works**
+
+
 Certainly! Let's dive deeper into the implementation of creating a new account in the Flask app.
 
 The code snippet provided includes the route `/accounts` with the HTTP method `POST`. This route is responsible for creating a new account based on the data provided in the request body.
