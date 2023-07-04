@@ -128,7 +128,7 @@ Please note that in the above example, the placeholders
 
 ```
 
-  **This is how the code works**
+  ##This is how the code works
 
 
 Certainly! Let's dive deeper into the implementation of creating a new account in the Flask app.
