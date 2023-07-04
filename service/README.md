@@ -128,7 +128,6 @@ Please note that in the above example, the placeholders
 
 ```
 
-```
   ## This is how the code works
 
 
