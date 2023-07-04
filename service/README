@@ -28,3 +28,8 @@ Example Request Body:
   "address": "123 Main St",
   "phone_number": "555-1234"
 }
+
+Response
+Status Code: 201 Created
+Location Header: URL of the newly created account
+Example Response Body:
