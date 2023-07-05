@@ -4,7 +4,7 @@ Account Service
 This microservice handles the lifecycle of Accounts
 """
 # pylint: disable=unused-import
-from flask import jsonify, request, make_response, abort  # noqa: F401
+from flask import jsonify, request, make_response, abort, url_for
 from service.models import Account
 from service.common import status  # HTTP Status Codes
 from . import app  # Import Flask application
@@ -29,6 +29,7 @@ def index():
         jsonify(
             name="Account REST API Service",
             version="1.0",
+            # paths=url_for("list_accounts", _external=True),
         ),
         status.HTTP_200_OK,
     )
@@ -49,6 +50,8 @@ def create_accounts():
     account.deserialize(request.get_json())
     account.create()
     message = account.serialize()
+    # Uncomment once get_accounts has been implemented
+    # location_url = url_for("get_accounts", account_id=account.id, _external=True)
     location_url = "/"  # Remove once get_accounts has been implemented
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
@@ -64,6 +67,7 @@ def list_accounts():
     List all Accounts
     This endpoint will list all Accounts
     """
+
     app.logger.info("Request to list Accounts")
     accounts = Account.all()
     account_list = [account.serialize() for account in accounts]
@@ -78,17 +82,14 @@ def list_accounts():
 def get_accounts(account_id):
     """
     Reads an Account
-    This endpoint will read an Account based on the account_id that is requested    
+    This endpoint will read an Account based on the account_id that is requested
     """
     app.logger.info("Request to read an Account with id: %s", account_id)
-
+   
     account = Account.find(account_id)
     if not account:
-        abort(
-            status.HTTP_404_NOT_FOUND,
-            f"Account with id [{account_id}] could not be found.",
-        )
-
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
+    
     return account.serialize(), status.HTTP_200_OK
 
 
@@ -104,10 +105,7 @@ def update_accounts(account_id):
     app.logger.info("Request to update an Account with id: %s", account_id)
     account = Account.find(account_id)
     if not account:
-        abort(
-            status.HTTP_404_NOT_FOUND,
-            f"Account with id [{account_id}] could not be found.",
-        )
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
     account.deserialize(request.get_json())
     account.update()
     return account.serialize(), status.HTTP_200_OK
@@ -131,7 +129,7 @@ def delete_accounts(account_id):
 
 
 ######################################################################
-#  U T I L I T Y   F U N C T I O N S
+# UTILITY FUNCTIONS
 ######################################################################
 def check_content_type(media_type):
     """Checks that the media type is correct"""
