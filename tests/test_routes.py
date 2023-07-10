@@ -1,7 +1,5 @@
-from contextlib import AbstractContextManager
 import os
 import logging
-from typing import Any
 from unittest import TestCase
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
@@ -119,7 +117,9 @@ class TestAccountService(TestCase):
             json=account.serialize(),
             content_type="test/html"
         )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
 
@@ -153,7 +153,9 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         new_account = resp.get_json()
         new_account["name"] = "Donald"
-        resp = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
+        resp = self.client.put(
+            f"{BASE_URL}/{new_account['id']}",
+            json=new_account)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "Donald")
@@ -172,7 +174,8 @@ class TestAccountService(TestCase):
             'X-Frame-Options': 'SAMEORIGIN',
             'X-XSS-Protection': '1; mode=block',
             'X-Content-Type-Options': 'nosniff',
-            'Content-Security-Policy': 'default-src \'self\'; object-src \'none\'',
+            'Content-Security-Policy':
+                'default-src \'self\'; object-src \'none\'',
             'Referrer-Policy': 'strict-origin-when-cross-origin'
         }
         for key, value in headers.items():
@@ -183,4 +186,6 @@ class TestAccountService(TestCase):
         response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # check for the CORS header
-        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
+        self.assertEqual(
+            response.headers.get('Access-Control-Allow-Origin'),
+            '*')
